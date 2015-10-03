@@ -68,7 +68,7 @@ public class Pool {
 	 * 
 	 * @param ID
 	 */
-	protected void myStateChanged(int ID, ThreadStates state) {
+	protected synchronized void myStateChanged(int ID, ThreadStates state) {
 		ThreadIdToState.put(ID, state);
 		if (state.equals(ThreadStates.IDLE) && !taskQueue.isEmpty()) {
 			threads.get(ID).exec(taskQueue.remove());
