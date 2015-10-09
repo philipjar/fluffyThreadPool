@@ -1,5 +1,5 @@
 # fluffyThreadPool
-WARNING: NOT FINISHED. MAY CONTAIN (LOTS OF) BUGS.
+WARNING: NOT FINISHED. MAY CONTAIN BUGS.
 
 Another Thread Pool implementation in Java.
 
@@ -9,12 +9,12 @@ queue and every time a Thread goes to Idle, the oldest element of the queue is p
 
 Example Code:
 
-/* Constructor needs max Number of Threads and PrintStream to print messages to (or null). */
-Pool pool = new Pool(1, System.out);
-Runnable exampleRun = new Runnable() {
-		@Override
-		public void run() {
-			System.out.println("Hello ThreadPool World!");
-		}
-	};
-pool.execute(exampleRun);
+/* Constructor needs max Number of Threads and PrintStream to print messages to (or null). */ <br />
+Pool pool = new Pool(1, System.out); <br />
+Runnable exampleRun = new Runnable() { <br />
+		@Override <br />
+		public void run() { <br />
+			System.out.println("Hello ThreadPool World!"); <br />
+		} <br />
+	}; <br />
+pool.execute(exampleRun); <br />
