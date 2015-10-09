@@ -18,11 +18,14 @@
 
 package de.philipjar.fluffythreadpool;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Pool {
+	
+	private PrintStream output;
 	
 	private int maxThreads = 0;
 	public enum ThreadStates {
@@ -31,16 +34,25 @@ public class Pool {
 	
 	private ArrayList<PoolThread> threads = new ArrayList<PoolThread>();
 	private HashMap<Integer, ThreadStates> ThreadIdToState = new HashMap<Integer, ThreadStates>();
+	
 	LinkedList<Runnable> taskQueue = new LinkedList<Runnable>();
 	
-	public Pool(int maxThreads) {
+	/**
+	 * Thread Pool Constructor.
+	 * Feed me.
+	 * 
+	 * @param maxThreads
+	 * @param output
+	 */
+	public Pool(int maxThreads, PrintStream output) {
 		this.maxThreads = maxThreads;
+		this.output = output;
 		buildPool();
 	}
 	
 	private void buildPool() {
-		if (maxThreads == 0) {
-			throw new PoolException("Max Number of Threads is 0 - won't run anything");
+		if (maxThreads < 1) {
+			throw new PoolException("Max Number of Threads is " + String.valueOf(maxThreads) + "!");
 		}
 		for (int i = 0; i < maxThreads; i++) {
 			threads.add(new PoolThread(this, i));
@@ -48,6 +60,11 @@ public class Pool {
 		}
 	}
 	
+	/**
+	 * Adds the given Runnable to the execution System.
+	 * 
+	 * @param runnable
+	 */
 	public void execute(Runnable runnable) {
 		boolean foundIdle = false;
 		for (PoolThread thread : threads) {
@@ -58,7 +75,17 @@ public class Pool {
 			}
 		}
 		if (!foundIdle) {
+			String hash = Integer.toHexString(runnable.hashCode());
+			printOut("execute - Didn't found Idle Thread...adding Runnable " + hash + " to Queue. "
+					+ "(Queuesize is " + String.valueOf(taskQueue.size()) + ").");
 			taskQueue.add(runnable);
+		}
+	}
+	
+	public void printOut(String msg) {
+		if (output != null)  {
+			output.println(msg);
+			output.flush();
 		}
 	}
 	
@@ -79,6 +106,7 @@ public class Pool {
 	 * Shuts down the whole ThreadPool.
 	 */
 	public void shutdown() {
+		printOut("shutdown - Shutting down the Pool.");
 		for (PoolThread pThread : threads) { 
 			pThread.shutdown();
 		}
