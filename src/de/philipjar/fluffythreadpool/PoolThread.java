@@ -33,7 +33,14 @@ public class PoolThread extends Thread {
 	private boolean preRun = true;
 	private boolean shutdown = false;
 	
-	public PoolThread(Pool daddy, int ID) {
+	/**
+	 * Pool Thread Constructor.
+	 * May only be called by a ThreadPool instance.
+	 * 
+	 * @param daddy
+	 * @param ID
+	 */
+	protected PoolThread(Pool daddy, int ID) {
 		super();
 		this.ID = ID;
 		this.daddy = daddy;
@@ -44,6 +51,7 @@ public class PoolThread extends Thread {
 	public void run() {
 		while (!shutdown) {
 			daddy.myStateChanged(ID, ThreadStates.EXECUTING);
+			daddy.printOut("pt - " + String.valueOf(ID) + " is executing now.");
 			if (runnable != null) {
 				runnable.run();
 			} else {
@@ -56,7 +64,6 @@ public class PoolThread extends Thread {
 			}
 			enterIdle();
 		}
-		/* call shutdown stuff */
 		daddy.myStateChanged(ID, ThreadStates.DEAD);
 	}
 	
@@ -74,7 +81,11 @@ public class PoolThread extends Thread {
 		}
 	}
 	
-	public void exec(Runnable runnable) {
+	/**
+	 * Plugs new Runnable into Thread and starts execution.
+	 * @param runnable
+	 */
+	protected void exec(Runnable runnable) {
 		if (idleFlag.get() || preRun) {
 			plugRunnable(runnable);
 			leaveIdle();
@@ -86,27 +97,16 @@ public class PoolThread extends Thread {
 	/**
 	 * Shuts down this Thread.
 	 */
-	public void shutdown() {
+	protected void shutdown() {
+		daddy.printOut("pt - Thread " + String.valueOf(ID) + " shutting down now.");
 		shutdown = true;
 		if(idleFlag.get())
 			leaveIdle();
 	}
 	
-	public int getPTID() {
+	protected int getPTID() {
 		return ID;
 	}
-	
-	/**
-	 * Emergency halts this Thread.
-	 */
-	/*
-	private void panicHalt() {
-		if (!locked) {
-			this.stop();
-		} else {
-			throw new PoolException("Panic Halt. Nothing left to say now.");
-		}
-	} */
 	
 	/**
 	 * Enters Idle State.
@@ -114,7 +114,7 @@ public class PoolThread extends Thread {
 	private void enterIdle() {
 		if (idleFlag.get() || shutdown)
 			return;
-		System.out.println(String.valueOf(ID) + " Thread IDLE");
+		daddy.printOut("pt - " + String.valueOf(ID) + " is Idle now.");
 		idleFlag.set(true);
 		daddy.myStateChanged(ID, ThreadStates.IDLE);
 		idle();
@@ -131,7 +131,7 @@ public class PoolThread extends Thread {
 	}
 	
 	/**
-	 * The synchronized Idle State
+	 * The Idle State.
 	 */
 	private void idle() {
 		synchronized (idleFlag) {
