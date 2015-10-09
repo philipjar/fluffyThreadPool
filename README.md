@@ -9,6 +9,7 @@ queue and every time a Thread goes to Idle, the oldest element of the queue is p
 
 Example Code:
 
+```
 /* Constructor needs max Number of Threads and PrintStream to print messages to (or null). */ <br />
 Pool pool = new Pool(1, System.out); <br />
 Runnable exampleRun = new Runnable() { <br />
@@ -18,3 +19,4 @@ Runnable exampleRun = new Runnable() { <br />
 		} <br />
 	}; <br />
 pool.execute(exampleRun); <br />
+```
