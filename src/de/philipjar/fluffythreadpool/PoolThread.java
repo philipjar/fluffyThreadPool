@@ -83,6 +83,7 @@ public class PoolThread extends Thread {
 	
 	/**
 	 * Plugs new Runnable into Thread and starts execution.
+	 * 
 	 * @param runnable
 	 */
 	protected void exec(Runnable runnable) {
