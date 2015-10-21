@@ -7,6 +7,9 @@ This Thread Pool will create a given Number of worker Threads and Idle all of th
 as Runnables. If there is an idling worker, it instantly executes the runnable. If not, the runnable is added to a
 queue and every time a Thread goes to Idle, the oldest element of the queue is processed by this Thread.
 
+This is a really simple (or stupid...) scheduling algorithm. A more complex and more efficient scheduling
+system will be added to the Project later.
+
 Example Code:
 
 ```java
