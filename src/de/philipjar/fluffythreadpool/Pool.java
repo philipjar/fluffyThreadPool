@@ -39,7 +39,6 @@ public class Pool {
 	
 	/**
 	 * Thread Pool Constructor.
-	 * Feed me.
 	 * 
 	 * @param maxThreads
 	 * @param output
