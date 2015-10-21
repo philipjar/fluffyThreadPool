@@ -19,4 +19,5 @@ Runnable exampleRun = new Runnable() {
 		}
 	};
 pool.execute(exampleRun);
+pool.shutdown();
 ```
