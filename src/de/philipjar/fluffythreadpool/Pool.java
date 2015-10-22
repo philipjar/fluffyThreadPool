@@ -65,6 +65,10 @@ public class Pool {
 	 * @param runnable
 	 */
 	public void execute(Runnable runnable) {
+		if (runnable == null) {
+			printOut("Can't execute null!");
+			return;
+		}
 		boolean foundIdle = false;
 		for (PoolThread thread : threads) {
 			if (ThreadIdToState.get(thread.getPTID()).equals(ThreadStates.IDLE)) {
@@ -81,7 +85,7 @@ public class Pool {
 		}
 	}
 	
-	public void printOut(String msg) {
+	protected void printOut(String msg) {
 		if (output != null)  {
 			output.println(msg);
 			output.flush();
